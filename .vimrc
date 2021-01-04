@@ -14,13 +14,20 @@ Plugin 'https://gitlab.com/n9n/vim-apl'
 Plugin 'https://github.com/skywind3000/asyncrun.vim'
 Plugin 'junegunn/fzf'
 Plugin 'francoiscabrol/ranger.vim'
+Plugin 'rbgrouleff/bclose.vim'
 Plugin 'preservim/nerdtree'
 Plugin 'jeetsukumaran/vim-pythonsense'
 Plugin 'yuratomo/w3m.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'godlygeek/tabular'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-commentary'
+Plugin 'niklasl/vim-rdf'
+Plugin 'yegappan/grep'
+
+Plugin 'luochen1990/rainbow'
+let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
 
 Plugin 'guns/vim-sexp'
 Plugin 'liquidz/vim-iced'
@@ -59,15 +66,18 @@ set incsearch
 set modeline
 set modelines=5
 set ruler
-set relativenumber
+" set relativenumber
 set wildmenu
 set ignorecase
 set noshowmode
+set belloff=all
+set hidden
 
 " git gutter update
 set updatetime=100
 
-"set tabstop=4 softtabstop=4 expandtab shiftwidth=4 smarttab
+" TODO how does this interact with editorconfig?
+set tabstop=4 softtabstop=4 expandtab shiftwidth=4 smarttab
 "set tabstop=2 softtabstop=2 expandtab shiftwidth=2 smarttab
 
 
@@ -177,7 +187,9 @@ let g:lsc_auto_map = v:true
 let g:lsc_trace_level = 'messages'
 set completeopt=menu,menuone,noinsert,noselect
 
-" Tell Neovim to set the filetype to 'sparql' for .sparql and .rq
+
+
+" set the filetype to 'sparql' for .sparql and .rq
 au BufRead,BufNewFile *.{sparql,rq}   setfiletype sparql
 au BufRead,BufNewFile *.{turtle,ttl}  setfiletype turtle
 
@@ -185,77 +197,80 @@ au BufRead,BufNewFile *.{turtle,ttl}  setfiletype turtle
 "au FileType w3m W3mSetUserAgent w3m 0
 "au FileType w3m call w3m#SetUserAgent('w3m', 0)
 "au FileType w3m let g:w3m#user_agent='w3m'
-au FileType w3m let g:w3m#search_engine='http://www.duckduckgo.com/?q=%s'
+au FileType w3m let g:w3m#search_engine='http://www.duckduckgo.com/html/?q=%s'
 
 au BufRead,BufNewFile *.{asd}   setfiletype lisp
 
 " modeline example
 " # vim: set expandtab:
 
-" do i want this just for vim-iced?
+" TODO do i want this just for vim-iced?
 let mapleader = ","
 
 let g:iced_enable_default_key_mappings = v:true
 let g:iced_enable_auto_document = 'insert'
 
+" TODO the problem with this approach is that pressing esc then j or k
+" invokes a function
+"
 " <M-k> style mappings don't work with gnome-terminal so i manually
 " modified some of them here:
-let g:sexp_mappings = {
-    \ 'sexp_outer_list':                'af',
-    \ 'sexp_inner_list':                'if',
-    \ 'sexp_outer_top_list':            'aF',
-    \ 'sexp_inner_top_list':            'iF',
-    \ 'sexp_outer_string':              'as',
-    \ 'sexp_inner_string':              'is',
-    \ 'sexp_outer_element':             'ae',
-    \ 'sexp_inner_element':             'ie',
-    \ 'sexp_move_to_prev_bracket':      '(',
-    \ 'sexp_move_to_next_bracket':      ')',
-    \ 'sexp_move_to_prev_element_head': 'b',
-    \ 'sexp_move_to_next_element_head': 'w',
-    \ 'sexp_move_to_prev_element_tail': 'g<M-e>',
-    \ 'sexp_move_to_next_element_tail': '<M-e>',
-    \ 'sexp_flow_to_prev_close':        '<M-[>',
-    \ 'sexp_flow_to_next_open':         '<M-]>',
-    \ 'sexp_flow_to_prev_open':         '<M-{>',
-    \ 'sexp_flow_to_next_close':        '<M-}>',
-    \ 'sexp_flow_to_prev_leaf_head':    '<M-S-b>',
-    \ 'sexp_flow_to_next_leaf_head':    '<M-S-w>',
-    \ 'sexp_flow_to_prev_leaf_tail':    '<M-S-g>',
-    \ 'sexp_flow_to_next_leaf_tail':    '<M-S-e>',
-    \ 'sexp_move_to_prev_top_element':  '[[',
-    \ 'sexp_move_to_next_top_element':  ']]',
-    \ 'sexp_select_prev_element':       '[e',
-    \ 'sexp_select_next_element':       ']e',
-    \ 'sexp_indent':                    '==',
-    \ 'sexp_indent_top':                '=-',
-    \ 'sexp_round_head_wrap_list':      '<LocalLeader>i',
-    \ 'sexp_round_tail_wrap_list':      '<LocalLeader>I',
-    \ 'sexp_square_head_wrap_list':     '<LocalLeader>[',
-    \ 'sexp_square_tail_wrap_list':     '<LocalLeader>]',
-    \ 'sexp_curly_head_wrap_list':      '<LocalLeader>{',
-    \ 'sexp_curly_tail_wrap_list':      '<LocalLeader>}',
-    \ 'sexp_round_head_wrap_element':   '<LocalLeader>w',
-    \ 'sexp_round_tail_wrap_element':   '<LocalLeader>W',
-    \ 'sexp_square_head_wrap_element':  '<LocalLeader>e[',
-    \ 'sexp_square_tail_wrap_element':  '<LocalLeader>e]',
-    \ 'sexp_curly_head_wrap_element':   '<LocalLeader>e{',
-    \ 'sexp_curly_tail_wrap_element':   '<LocalLeader>e}',
-    \ 'sexp_insert_at_list_head':       '<LocalLeader>h',
-    \ 'sexp_insert_at_list_tail':       '<LocalLeader>l',
-    \ 'sexp_splice_list':               '<LocalLeader>@',
-    \ 'sexp_convolute':                 '<LocalLeader>?',
-    \ 'sexp_raise_list':                '<LocalLeader>o',
-    \ 'sexp_raise_element':             '<LocalLeader>O',
-    \ 'sexp_swap_list_backward':        'k',
-    \ 'sexp_swap_list_forward':         'j',
-    \ 'sexp_swap_element_backward':     'h',
-    \ 'sexp_swap_element_forward':      'l',
-    \ 'sexp_emit_head_element':         'J',
-    \ 'sexp_emit_tail_element':         'K',
-    \ 'sexp_capture_prev_element':      'H',
-    \ 'sexp_capture_next_element':      'L',
-    \ }
+" let g:sexp_mappings = {
+"     \ 'sexp_outer_list':                'af',
+"     \ 'sexp_inner_list':                'if',
+"     \ 'sexp_outer_top_list':            'aF',
+"     \ 'sexp_inner_top_list':            'iF',
+"     \ 'sexp_outer_string':              'as',
+"     \ 'sexp_inner_string':              'is',
+"     \ 'sexp_outer_element':             'ae',
+"     \ 'sexp_inner_element':             'ie',
+"     \ 'sexp_move_to_prev_bracket':      '(',
+"     \ 'sexp_move_to_next_bracket':      ')',
+"     \ 'sexp_move_to_prev_element_head': 'b',
+"     \ 'sexp_move_to_next_element_head': 'w',
+"     \ 'sexp_move_to_prev_element_tail': 'g<M-e>',
+"     \ 'sexp_move_to_next_element_tail': '<M-e>',
+"     \ 'sexp_flow_to_prev_close':        '<M-[>',
+"     \ 'sexp_flow_to_next_open':         '<M-]>',
+"     \ 'sexp_flow_to_prev_open':         '<M-{>',
+"     \ 'sexp_flow_to_next_close':        '<M-}>',
+"     \ 'sexp_flow_to_prev_leaf_head':    '<M-S-b>',
+"     \ 'sexp_flow_to_next_leaf_head':    '<M-S-w>',
+"     \ 'sexp_flow_to_prev_leaf_tail':    '<M-S-g>',
+"     \ 'sexp_flow_to_next_leaf_tail':    '<M-S-e>',
+"     \ 'sexp_move_to_prev_top_element':  '[[',
+"     \ 'sexp_move_to_next_top_element':  ']]',
+"     \ 'sexp_select_prev_element':       '[e',
+"     \ 'sexp_select_next_element':       ']e',
+"     \ 'sexp_indent':                    '==',
+"     \ 'sexp_indent_top':                '=-',
+"     \ 'sexp_round_head_wrap_list':      '<LocalLeader>i',
+"     \ 'sexp_round_tail_wrap_list':      '<LocalLeader>I',
+"     \ 'sexp_square_head_wrap_list':     '<LocalLeader>[',
+"     \ 'sexp_square_tail_wrap_list':     '<LocalLeader>]',
+"     \ 'sexp_curly_head_wrap_list':      '<LocalLeader>{',
+"     \ 'sexp_curly_tail_wrap_list':      '<LocalLeader>}',
+"     \ 'sexp_round_head_wrap_element':   '<LocalLeader>w',
+"     \ 'sexp_round_tail_wrap_element':   '<LocalLeader>W',
+"     \ 'sexp_square_head_wrap_element':  '<LocalLeader>e[',
+"     \ 'sexp_square_tail_wrap_element':  '<LocalLeader>e]',
+"     \ 'sexp_curly_head_wrap_element':   '<LocalLeader>e{',
+"     \ 'sexp_curly_tail_wrap_element':   '<LocalLeader>e}',
+"     \ 'sexp_insert_at_list_head':       '<LocalLeader>h',
+"     \ 'sexp_insert_at_list_tail':       '<LocalLeader>l',
+"     \ 'sexp_splice_list':               '<LocalLeader>@',
+"     \ 'sexp_convolute':                 '<LocalLeader>?',
+"     \ 'sexp_raise_list':                '<LocalLeader>o',
+"     \ 'sexp_raise_element':             '<LocalLeader>O',
+"     \ 'sexp_swap_list_backward':        'k',
+"     \ 'sexp_swap_list_forward':         'j',
+"     \ 'sexp_swap_element_backward':     'h',
+"     \ 'sexp_swap_element_forward':      'l',
+"     \ 'sexp_emit_head_element':         'J',
+"     \ 'sexp_emit_tail_element':         'K',
+"     \ 'sexp_capture_prev_element':      'H',
+"     \ 'sexp_capture_next_element':      'L',
+"     \ }
 
 
 
@@ -271,3 +286,27 @@ endfunction
 "inoremap <silent> <buffer> <Tab>  <C-R>=CleverTab()<CR>
 inoremap <silent> <Tab>  <C-R>=CleverTab()<CR>
 
+
+
+
+
+function! LookAtImage(...)
+        " let fpath=expand('<cfile>')
+        let fpath=expand('%')
+        execute('!feh ' . fpath)
+endfunction
+" au BufRead *.png,*.jpg,*.jpeg :call LookAtImage()
+au BufEnter *.png,*.jpg,*.jpeg :call LookAtImage()
+" au BufAdd  *.png,*.jpg,*.jpeg :call Owen()
+
+
+
+au BufRead *.xml let &l:equalprg='xmllint --format --recover -'
+
+
+command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+      \ | wincmd p | diffthis
+
+" for using 'francoiscabrol/ranger.vim' instead of NERDTree
+let g:NERDTreeHijackNetrw = 0  " add this line if you use NERDTree
+let g:ranger_replace_netrw = 1 " open ranger when vim open a directory
