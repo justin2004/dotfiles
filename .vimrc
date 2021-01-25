@@ -13,15 +13,15 @@ Plugin 'jpalardy/vim-slime'
 Plugin 'https://gitlab.com/n9n/vim-apl'
 Plugin 'https://github.com/skywind3000/asyncrun.vim'
 Plugin 'junegunn/fzf'
-Plugin 'francoiscabrol/ranger.vim'
+"Plugin 'francoiscabrol/ranger.vim'
 Plugin 'rbgrouleff/bclose.vim'
-Plugin 'preservim/nerdtree'
+"Plugin 'preservim/nerdtree'
 Plugin 'jeetsukumaran/vim-pythonsense'
 Plugin 'yuratomo/w3m.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'godlygeek/tabular'
-Plugin 'sheerun/vim-polyglot'
+" Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-commentary'
 Plugin 'niklasl/vim-rdf'
 Plugin 'yegappan/grep'
@@ -46,11 +46,13 @@ Plugin 'junegunn/goyo.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
 Plugin 'neo4j-contrib/cypher-vim-syntax'
-"Plugin 'vim-scripts/sparql.vim'
+Plugin 'vim-scripts/sparql.vim'
 
 "Plugin 'udalov/kotlin-vim'
 "Plugin 'klen/python-mode'
 "Plugin 'fatih/vim-go'
+
+Plugin 'vim-scripts/utl.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -77,7 +79,8 @@ set hidden
 set updatetime=100
 
 " TODO how does this interact with editorconfig?
-set tabstop=4 softtabstop=4 expandtab shiftwidth=4 smarttab
+set tabstop=4 softtabstop=4 expandtab shiftwidth=4 
+" smarttab
 "set tabstop=2 softtabstop=2 expandtab shiftwidth=2 smarttab
 
 
@@ -91,6 +94,7 @@ let g:slime_python_ipython = 1
 
 "map  1G!Ggnuplot -persist
 "map  1G!Gnode
+map  :Utl
 
 set history=10000
 
@@ -297,16 +301,36 @@ function! LookAtImage(...)
 endfunction
 " au BufRead *.png,*.jpg,*.jpeg :call LookAtImage()
 au BufEnter *.png,*.jpg,*.jpeg :call LookAtImage()
-" au BufAdd  *.png,*.jpg,*.jpeg :call Owen()
 
 
 
 au BufRead *.xml let &l:equalprg='xmllint --format --recover -'
 
 
+" i think the window with the filename is the recovered file
+" [scratch] is the non-recovered
 command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
       \ | wincmd p | diffthis
 
+
 " for using 'francoiscabrol/ranger.vim' instead of NERDTree
-let g:NERDTreeHijackNetrw = 0  " add this line if you use NERDTree
-let g:ranger_replace_netrw = 1 " open ranger when vim open a directory
+" let g:NERDTreeHijackNetrw = 0  " add this line if you use NERDTree
+" let g:ranger_replace_netrw = 1 " open ranger when vim open a directory
+
+
+
+" let g:utl_cfg_hdl_scm_http = "!echo %u \#%f"
+let g:utl_cfg_hdl_scm_http = ":W3m %u"
+
+"TODO   maybe make a tmux pane instead of xterm?
+let g:utl_cfg_hdl_scm_mailto = "!xterm -e mutt '%u'" 
+" let g:utl_cfg_hdl_scm_mailto = "!echo '%u' '%f'" 
+
+
+" let g:utl_cfg_hdl_mt_generic = 'silent !konqueror "%p" &'
+let g:utl_cfg_hdl_mt_generic = ':edit %p'
+
+
+" Per default, netrw leaves unmodified buffers open. This autocommand
+" deletes netrw's buffer once it's hidden (using ':q', for example)
+autocmd FileType netrw setl bufhidden=delete
