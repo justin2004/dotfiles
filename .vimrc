@@ -17,7 +17,7 @@ Plugin 'junegunn/fzf'
 Plugin 'rbgrouleff/bclose.vim'
 "Plugin 'preservim/nerdtree'
 Plugin 'jeetsukumaran/vim-pythonsense'
-Plugin 'yuratomo/w3m.vim'
+Plugin 'justin2004/w3m.vim'  "my fork of 'yuratomo/w3m.vim'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'godlygeek/tabular'
@@ -25,6 +25,7 @@ Plugin 'godlygeek/tabular'
 Plugin 'tpope/vim-commentary'
 Plugin 'niklasl/vim-rdf'
 Plugin 'yegappan/grep'
+Plugin 'reedes/vim-pencil'
 
 Plugin 'luochen1990/rainbow'
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
@@ -106,8 +107,12 @@ set laststatus=2
 set statusline=%f\ %y\ %m\ %p%%\ %l\ %c
 hi StatusLine ctermbg=White ctermfg=DarkBlue
 
-" for vim as a rest client
+"""""""  for vim as a rest client
 "mm1Gvap"cy'mvap"Cy:split +put\ c buf0:set buftype=nofile:file! `mktemp`1G!Gbash
+
+" better if you want to look at the results in an external tool
+"mm1Gvap"cy'mvap"Cy:split +put\ c buf0:set buftype=nofile:file! `mktemp`1G!Gbash:w /tmp/lala1.csv:q'mzz:AsyncRun tmux split-window 'vd /tmp/lala1.csv'
+""""""""""""""""""""""""
 
 
 " python
@@ -339,3 +344,20 @@ autocmd FileType netrw setl bufhidden=delete
 
 " it was previously /*   */  which isn't valid
 au FileType turtle set commentstring=#%s
+
+
+
+
+" for suckless ii       <url:https://tools.suckless.org/ii/>
+"         thanks to    https://unix.stackexchange.com/questions/82058/how-do-i-make-vim-behave-like-tail-f
+au! BufRead,BufNewFile out
+au BufRead,BufNewFile out setfiletype iiout
+" au BufRead,BufNewFile out silent !mpv --start 10 --end 11 ~/Music/LEON.wav &
+au BufRead,BufNewFile out silent :AsyncRun mpv --start 25 --end 26 ~/Music/LEON.wav &
+au FileType iiout setl nomodeline   " TODO when i source vimrc from the out file it ignores this
+au FileType iiout set nomodeline
+" TODO use  |FocusGained|	so we don't hear a sound when i am in the window
+au FileType iiout setl updatetime=1500 " i have to increase this so that the call to feedkeys() doesn't disrupt my multi-key presses
+au FileType iiout setl autoread | au CursorHold out checktime | if line('.') == line('w$') | call feedkeys("G") | else | call feedkeys("lh") | endif
+au FileType iiout syn match	me /justin20044/
+au FileType iiout hi default link me Function
