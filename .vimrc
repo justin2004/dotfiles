@@ -365,3 +365,7 @@ au FileType iiout setl updatetime=1500 " i have to increase this so that the cal
 au FileType iiout setl autoread | au CursorHold out checktime | if line('.') == line('w$') | call feedkeys("G") | else | call feedkeys("lh") | endif
 au FileType iiout syn match	me /justin20044/
 au FileType iiout hi default link me Function
+
+
+" do i like this?
+set cpo+=$
