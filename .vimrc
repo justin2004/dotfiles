@@ -54,6 +54,7 @@ Plugin 'vim-scripts/sparql.vim'
 "Plugin 'fatih/vim-go'
 
 Plugin 'vim-scripts/utl.vim'
+Plugin 'justin2004/vim-repo-edit'
 
 call vundle#end()
 filetype plugin indent on
@@ -324,8 +325,10 @@ command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
 
 
 
-" let g:utl_cfg_hdl_scm_http = "!echo %u \#%f"
+" let g:utl_cfg_hdl_scm_http = "!echo %u#%f"
 let g:utl_cfg_hdl_scm_http = ":W3m %u"
+" let g:utl_cfg_hdl_scm_http = ":W3m %u%f"
+" TODO does :W3m handle fragments?
 
 "TODO   maybe make a tmux pane instead of xterm?
 let g:utl_cfg_hdl_scm_mailto = "!xterm -e mutt '%u'" 
@@ -350,13 +353,14 @@ au FileType turtle set commentstring=#%s
 
 " for suckless ii       <url:https://tools.suckless.org/ii/>
 "         thanks to    https://unix.stackexchange.com/questions/82058/how-do-i-make-vim-behave-like-tail-f
-au! BufRead,BufNewFile out
-au BufRead,BufNewFile out setfiletype iiout
+au! BufRead,BufNewFile */out
+au BufRead,BufNewFile */out setfiletype iiout
 " au BufRead,BufNewFile out silent !mpv --start 10 --end 11 ~/Music/LEON.wav &
 au BufRead,BufNewFile out silent :AsyncRun mpv --start 25 --end 26 ~/Music/LEON.wav &
 au FileType iiout setl nomodeline   " TODO when i source vimrc from the out file it ignores this
 au FileType iiout set nomodeline
 " TODO use  |FocusGained|	so we don't hear a sound when i am in the window
+" VimEnter,VimResume, VimLeave,VimSuspend
 au FileType iiout setl updatetime=1500 " i have to increase this so that the call to feedkeys() doesn't disrupt my multi-key presses
 au FileType iiout setl autoread | au CursorHold out checktime | if line('.') == line('w$') | call feedkeys("G") | else | call feedkeys("lh") | endif
 au FileType iiout syn match	me /justin20044/
