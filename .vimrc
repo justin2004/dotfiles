@@ -23,6 +23,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'godlygeek/tabular'
 " Plugin 'sheerun/vim-polyglot'
 Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-markdown'
 Plugin 'niklasl/vim-rdf'
 Plugin 'yegappan/grep'
 Plugin 'reedes/vim-pencil'
@@ -368,4 +369,9 @@ au FileType iiout hi default link me Function
 
 
 " do i like this?
+"    yes
 set cpo+=$
+
+
+" vim-markdown
+let g:markdown_fenced_languages = ['erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'xml', 'html', 'python', 'bash=sh','lisp','clj=clojure']
