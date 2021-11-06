@@ -10,7 +10,8 @@ Plugin 'tpope/vim-dadbod'
 Plugin 'moll/vim-node'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'jpalardy/vim-slime'
-Plugin 'https://gitlab.com/n9n/vim-apl'
+" Plugin 'https://gitlab.com/n9n/vim-apl'   " where is my fork
+Plugin 'https://github.com/justin2004/vim-apl'
 Plugin 'https://github.com/skywind3000/asyncrun.vim'
 Plugin 'junegunn/fzf'
 "Plugin 'francoiscabrol/ranger.vim'
@@ -74,6 +75,7 @@ set ruler
 " set relativenumber
 set wildmenu
 set ignorecase
+set smartcase
 set noshowmode
 set belloff=all
 set hidden
@@ -348,6 +350,7 @@ autocmd FileType netrw setl bufhidden=delete
 
 " it was previously /*   */  which isn't valid
 au FileType turtle set commentstring=#%s
+au FileType sparql set commentstring=#%s
 
 
 
