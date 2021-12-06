@@ -74,7 +74,7 @@ set modelines=5
 set ruler
 " set relativenumber
 set wildmenu
-set ignorecase
+set noignorecase " having ignorecase caused me to not see (for like 30 mins) i was using the wrong variable
 set smartcase
 set noshowmode
 set belloff=all
