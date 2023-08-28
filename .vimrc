@@ -28,6 +28,7 @@ Plugin 'tpope/vim-markdown'
 Plugin 'niklasl/vim-rdf'
 Plugin 'yegappan/grep'
 Plugin 'reedes/vim-pencil'
+" Plugin 'chrisbra/csv.vim'
 
 Plugin 'luochen1990/rainbow'
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
@@ -189,7 +190,9 @@ nnoremap <leader>r :<C-U>RangerChooser<CR>
 
 let g:lsc_server_commands = {'groovy': {'name':'groovy-langserver',  'command': 'docker run --rm -i groovy'}}
 "call extend(g:lsc_server_commands, {'java': {'name': 'java-langserver',    'command': 'bash -c "docker run --rm -i -v `pwd`:`pwd` -i justin2004/lsp-java"'}})
-call extend(g:lsc_server_commands, {'java': {'name': 'java-langserver',    'command': 'bash -c "docker run --rm -i -v `pwd`:`pwd` -i justin2004/java-language-server_box"'}})
+"
+" TODO need to fix java:
+" call extend(g:lsc_server_commands, {'java': {'name': 'java-langserver',    'command': 'bash -c "docker run --rm -i -v `pwd`:`pwd` -i justin2004/java-language-server_box"'}})
 "call extend(g:lsc_server_commands, {'go'  : {'name': 'go-langserver',  'command': 'docker run --rm -i justin2004/gopls_box', 'log_level':-1, 'suppress_stderr': v:false}})
 "call extend(g:lsc_server_commands, {'go'  : {'name': 'go-langserver',  'command': 'docker run --rm -i justin2004/gopls_box'}})
 call extend(g:lsc_server_commands, {'go'  : {'name': 'go-langserver', 'command': 'bash -c "docker run --rm -i -v `pwd`:`pwd` justin2004/gopls_box"', 'log_level':-1,'suppress_stderr':v:true}})
@@ -306,7 +309,7 @@ inoremap <silent> <Tab>  <C-R>=CleverTab()<CR>
 function! LookAtImage(...)
         " let fpath=expand('<cfile>')
         let fpath=expand('%')
-        execute('!feh ' . fpath)
+        execute('!feh --force-aliasing ' . fpath)
 endfunction
 " au BufRead *.png,*.jpg,*.jpeg :call LookAtImage()
 au BufEnter *.png,*.jpg,*.jpeg :call LookAtImage()
@@ -355,20 +358,20 @@ au FileType sparql set commentstring=#%s
 
 
 
-" for suckless ii       <url:https://tools.suckless.org/ii/>
-"         thanks to    https://unix.stackexchange.com/questions/82058/how-do-i-make-vim-behave-like-tail-f
-au! BufRead,BufNewFile */out
-au BufRead,BufNewFile */out setfiletype iiout
-" au BufRead,BufNewFile out silent !mpv --start 10 --end 11 ~/Music/LEON.wav &
-au BufRead,BufNewFile out silent :AsyncRun mpv --start 25 --end 26 ~/Music/LEON.wav &
-au FileType iiout setl nomodeline   " TODO when i source vimrc from the out file it ignores this
-au FileType iiout set nomodeline
-" TODO use  |FocusGained|	so we don't hear a sound when i am in the window
-" VimEnter,VimResume, VimLeave,VimSuspend
-au FileType iiout setl updatetime=1500 " i have to increase this so that the call to feedkeys() doesn't disrupt my multi-key presses
-au FileType iiout setl autoread | au CursorHold out checktime | if line('.') == line('w$') | call feedkeys("G") | else | call feedkeys("lh") | endif
-au FileType iiout syn match	me /justin20044/
-au FileType iiout hi default link me Function
+" " for suckless ii       <url:https://tools.suckless.org/ii/>
+" "         thanks to    https://unix.stackexchange.com/questions/82058/how-do-i-make-vim-behave-like-tail-f
+" au! BufRead,BufNewFile */out
+" au BufRead,BufNewFile */out setfiletype iiout
+" " au BufRead,BufNewFile out silent !mpv --start 10 --end 11 ~/Music/LEON.wav &
+" au BufRead,BufNewFile out silent :AsyncRun mpv --start 25 --end 26 ~/Music/LEON.wav &
+" au FileType iiout setl nomodeline   " TODO when i source vimrc from the out file it ignores this
+" au FileType iiout set nomodeline
+" " TODO use  |FocusGained|	so we don't hear a sound when i am in the window
+" " VimEnter,VimResume, VimLeave,VimSuspend
+" au FileType iiout setl updatetime=1500 " i have to increase this so that the call to feedkeys() doesn't disrupt my multi-key presses
+" au FileType iiout setl autoread | au CursorHold out checktime | if line('.') == line('w$') | call feedkeys("G") | else | call feedkeys("lh") | endif
+" au FileType iiout syn match	me /justin20044/
+" au FileType iiout hi default link me Function
 
 
 " do i like this?
@@ -378,3 +381,13 @@ set cpo+=$
 
 " vim-markdown
 let g:markdown_fenced_languages = ['erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'xml', 'html', 'python', 'bash=sh','lisp','clj=clojure']
+
+" TODO conditional 
+" call iced#hook#add('evaluated', {
+"      \ 'type': 'function',
+"      \ 'exec': {d -> iced#buffer#stdout#append(d['result']['value'])},
+"      \ })
+
+
+" spell check on by default 
+" set spell
