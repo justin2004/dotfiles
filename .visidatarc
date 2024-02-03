@@ -1,0 +1,37 @@
+# vim: set filetype=python:
+
+# import manhole
+# manhole.install()
+
+Sheet.addCommand('z$', 'type-bytes-rstrip', 'cursorCol.type=bytes.rstrip')
+options.clean_names = True
+import vdplus.api.google
+
+# @VisiData.api
+# def open_justin(vd, p):
+#     # import code 
+#     # code.interact()
+#     import manhole
+#     manhole.install()
+#     return CsvSheet(p.name, source=p)
+#     # return TableSheet(p)
+
+import subprocess
+import pprint
+
+def rlwrap_repl():
+    with SuspendCurses():
+        pp = pprint.PrettyPrinter(indent=4).pprint
+        while True:
+            try:
+                source = subprocess.run(['rlwrap','--one-shot','--substitute-prompt',">>> ",'cat'], text=True, capture_output=True).stdout
+                if not source:
+                    break
+                print(eval(source))
+            except (EOFError, KeyboardInterrupt):
+                break
+            except Exception as e:
+                print(e)
+                continue
+
+BaseSheet.addCommand('2', 'REPL', 'rlwrap_repl()')

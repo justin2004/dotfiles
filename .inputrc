@@ -1,5 +1,5 @@
 #  gdb tui does not like these when you try to ctrl-x a
-#set editing-mode vi
+set editing-mode vi
 #set keymap vi
 
 #set blink-matching-paren on
