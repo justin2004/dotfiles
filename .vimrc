@@ -355,6 +355,15 @@ autocmd FileType netrw setl bufhidden=delete
 au FileType turtle set commentstring=#%s
 au FileType sparql set commentstring=#%s
 
+au BufRead,BufNewFile .gitattributes setfiletype gitattributes
+au FileType gitattributes set commentstring=#%s
+
+au FileType turtle set iskeyword=@,48-57,_,192-255,:,-,<,>,/,.
+" augroup FileTypeSettings
+"     autocmd!
+"     autocmd FileType turtle setlocal iskeyword=@,48-57,_,192-255,:,-,<,>,/,.
+" augroup END
+
 
 
 
@@ -391,3 +400,31 @@ let g:markdown_fenced_languages = ['erb=eruby', 'javascript', 'js=javascript', '
 
 " spell check on by default 
 " set spell
+
+
+" function! MyBalloonExpr()
+"     let l:word_under_cursor = expand('<cword>')
+"     let l:tooltip_text = 'Tooltip for: ' . l:word_under_cursor
+"     return l:tooltip_text
+" endfunction
+
+function! BuildCommand(uri)
+    " let l:uri = matchstr(expand('<cword>'),'\%(\k\+\)')
+    "
+
+    let l:command = '~/Downloads/apache-jena-4.10.0/bin/sparql --results=csv --data some.ttl --query <(cat prefixes.ttl ; echo "select * where { ' . a:uri . ' ex:name ?o} limit 1") | tail -1'
+    echom 'running command ' . l:command
+    let l:result = system(l:command)
+    return l:result
+endfunction
+
+" set laststatus=2
+" set statusline+=%{MyKeyword()}
+" function! MyKeyword()
+"     let l:uri = matchstr(expand('<cword>'), '\%(\k\+\)')
+"     let l:command = '~/Downloads/apache-jena-4.10.0/bin/sparql --results=csv --data some.ttl --query <(cat prefixes.ttl ; echo "select * where { ' . l:uri . ' ex:name ?o} limit 1") | tail -1'
+"     " return matchstr(expand('<cword>'), '\%(\k\+\)')
+"     let l:result = system(l:command)
+"     return l:result
+" endfunction
+
