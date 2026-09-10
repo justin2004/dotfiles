@@ -1,0 +1,27 @@
+plugins:
+  # See https://k9scli.io/topics/plugins/
+  raw-logs-follow:
+    shortCut: Ctrl-L
+    description: logs -f
+    scopes:
+    - po
+    command: kubectl
+    background: false
+    args:
+    - logs
+    - -f
+    - $NAME
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+  vim-logs:
+    shortCut: Shift-L
+    description: vimlogs
+    scopes:
+    - po
+    command: bash
+    background: false
+    args:
+    - -c
+    - 'kubectl logs "$NAME" -n "$NAMESPACE" --context "$CONTEXT" | vim -c "set buftype=nofile" -'
