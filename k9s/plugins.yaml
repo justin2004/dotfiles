@@ -20,8 +20,12 @@ plugins:
     description: vimlogs
     scopes:
     - po
+    - containers
     command: bash
     background: false
     args:
     - -c
-    - 'kubectl logs "$NAME" -n "$NAMESPACE" --context "$CONTEXT" | vim -c "set buftype=nofile" -'
+    - |
+      CONTAINER_ARG=""
+      if [ -n "$POD" ]; then CONTAINER_ARG="-c $NAME" ; NN="$POD" ; else NN="$NAME" ; fi
+      kubectl logs "$NN" $CONTAINER_ARG -n "$NAMESPACE" --context "$CONTEXT" | vim -c "set buftype=nofile" -
